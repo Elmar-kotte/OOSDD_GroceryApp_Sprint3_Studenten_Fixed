@@ -42,7 +42,6 @@ public class TestSearchbar
         List<Product> filteredList = groceryListItemsService.FilterAvailableProducts(stringInput, products);
         filteredList = filteredList.OrderBy(p => p.Id).ToList();
         
-        
         // Assert
         Assert.That(filteredList.Select(p => p.Id), Is.EqualTo(expectedOutput.Select(p => p.Id)));
     }
