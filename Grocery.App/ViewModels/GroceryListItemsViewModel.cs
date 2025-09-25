@@ -36,39 +36,13 @@ namespace Grocery.App.ViewModels
             _fileSaverService = fileSaverService;
             Load(groceryList.Id);
         }
-
-        public void FilterAvailableProducts(string stringInName)
-        {
-            GetAvailableProducts(); // Update the available products before filtering through the items.
-            
-            // Make sure to not filter when no string is given
-            // if (stringInName == "")
-            //     return;
-            // EDIT: This works nativly with the Contains function
-            
-            stringInName = stringInName.ToLower(); // Ensure the string is in lowecase to avoid irritation while searching
-            
-            List<Product> oldProducts = new List<Product>(AvailableProducts); // Copy the list of AvailableProducts to loop over
-            
-            foreach (var product in oldProducts)
-            {
-                if (product.Name.ToLower().Contains(stringInName) == false)
-                {
-                    // Find the right reference to the product in available products list
-                    int productId = product.Id;
-                    Product? productInAvailableProducts = AvailableProducts.FirstOrDefault(x => x.Id == productId);
-                    
-                    // If the product is found then remove it from teh available products list
-                    if (productInAvailableProducts != null)
-                        AvailableProducts.Remove(productInAvailableProducts);
-                }
-            }
-        }
         
         private void OnSearch(string text)
         {
             // Filter products with new text
-            FilterAvailableProducts(text);
+            GetAvailableProducts();
+            List<Product> newList = _groceryListItemsService.FilterAvailableProducts(text, AvailableProducts.ToList());
+            _groceryListItemsService.ReplaceObservableList(newList, AvailableProducts);
         }
         
         private void Load(int id)
@@ -85,7 +59,6 @@ namespace Grocery.App.ViewModels
                 if (MyGroceryListItems.FirstOrDefault(g => g.ProductId == p.Id) == null  && p.Stock > 0)
                     AvailableProducts.Add(p);
         }
-
 
 
         partial void OnGroceryListChanged(GroceryList value)
