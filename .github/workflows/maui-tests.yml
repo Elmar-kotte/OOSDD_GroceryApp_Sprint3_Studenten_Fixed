@@ -33,5 +33,11 @@ jobs:
       - name: Bouw de applicatie
         run: dotnet build --configuration Release --no-restore
  
-      - name: Voer unit tests uit
-        run: dotnet test --configuration Release --no-restore --no-build --verbosity normal
+      - name: Voer unit tests uit en genereer rapport
+        run: dotnet test --configuration Release --no-restore --no-build --verbosity normal --logger "trx;LogFileName=test_results.trx" --results-directory ./TestResults
+
+      - name: Upload test resultaten als artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-test-results
+          path: ./TestResults
