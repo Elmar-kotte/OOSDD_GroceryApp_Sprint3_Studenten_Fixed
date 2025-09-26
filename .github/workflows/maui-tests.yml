@@ -14,7 +14,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest  # Of windows-latest/macOS-latest als specifiek platform nodig is
+    runs-on: ubuntu-latest
     steps:
       - name: Haal de repository op
         uses: actions/checkout@v4
@@ -22,7 +22,7 @@ jobs:
       - name: Installeer .NET SDK
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '8.0.x'  # Gebruik de juiste versie voor MAUI
+          dotnet-version: '8.0.x'
  
       - name: Installeer MAUI workloads
         run: dotnet workload install maui-android
@@ -33,10 +33,14 @@ jobs:
       - name: Bouw de applicatie
         run: dotnet build --configuration Release --no-restore
  
-      - name: Voer unit tests uit en genereer rapport
-        run: dotnet test --configuration Release --no-restore --no-build --verbosity normal --logger "trx;LogFileName=test_results.trx" --results-directory ./TestResults
+      - name: Voer unit tests uit en genereer rapport + logs
+        run: |
+          mkdir -p TestResults
+          dotnet test --configuration Release --no-restore --no-build --verbosity normal \
+            --logger "trx;LogFileName=test_results.trx" \
+            --results-directory ./TestResults | tee ./TestResults/test_log.txt
 
-      - name: Upload test resultaten als artifact
+      - name: Upload test resultaten + logs als artifact
         uses: actions/upload-artifact@v4
         with:
           name: unit-test-results
