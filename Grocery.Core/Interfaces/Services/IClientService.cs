@@ -4,6 +4,8 @@ namespace Grocery.Core.Interfaces.Services
 {
     public interface IClientService
     {
+        public Client? RegisterClient(Client client);
+        
         public Client? Get(string email);
 
         public Client? Get(int id);
