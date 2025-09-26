@@ -1,4 +1,5 @@
 ﻿
+using System.Collections.ObjectModel;
 using Grocery.Core.Models;
 
 namespace Grocery.Core.Interfaces.Services
@@ -16,5 +17,9 @@ namespace Grocery.Core.Interfaces.Services
         public GroceryListItem? Get(int id);
 
         public GroceryListItem? Update(GroceryListItem item);
+
+        public List<Product> FilterAvailableProducts(string stringInName, List<Product> products);
+        
+        public void ReplaceObservableList(List<Product> productsToRemove, ObservableCollection<Product> listToRemoveFrom);
     }
 }

@@ -17,6 +17,13 @@ namespace Grocery.Core.Data.Repositories
             ];
         }
 
+        public Client? AddClient(Client client)
+        {
+            Client newClient = new Client(clientList.Count + 1, client.Name, client.EmailAddress, client.Password);
+            clientList.Add(newClient);
+
+            return newClient;
+        }
         public Client? Get(string email)
         {
             Client? client = clientList.FirstOrDefault(c => c.EmailAddress.Equals(email));
