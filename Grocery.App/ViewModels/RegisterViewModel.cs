@@ -1,52 +1,52 @@
 ﻿
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Grocery.App.Views;
 using Grocery.Core.Interfaces.Services;
 using Grocery.Core.Models;
 
 namespace Grocery.App.ViewModels
 {
-    public partial class LoginViewModel : BaseViewModel
+    public partial class RegisterViewModel : BaseViewModel
     {
         private readonly IAuthService _authService;
         private readonly GlobalViewModel _global;
 
         [ObservableProperty]
-        private string email = "user3@mail.com";
+        private string name = "";
+        
+        [ObservableProperty]
+        private string email = "";
 
         [ObservableProperty]
-        private string password = "user3";
-
+        private string password = "";
+        
         [ObservableProperty]
-        private string loginMessage;
+        private string passwordRepetition = "";
+        
+        [ObservableProperty]
+        private string registerMessage;
 
-        public LoginViewModel(IAuthService authService, GlobalViewModel global)
+        public RegisterViewModel(IAuthService authService, GlobalViewModel global)
         { //_authService = App.Services.GetServices<IAuthService>().FirstOrDefault();
             _authService = authService;
             _global = global;
         }
 
         [RelayCommand]
-        private void Login()
+        private void Register()
         {
-            Client? authenticatedClient = _authService.Login(Email, Password);
-            if (authenticatedClient != null)
+            Client? authenticatedClient = _authService.Register(Name, Email, Password);
+            
+            if (authenticatedClient != null && Password == PasswordRepetition)
             {
-                LoginMessage = $"Welkom {authenticatedClient.Name}!";
+                RegisterMessage = $"Welkom nieuwe gebruiker {authenticatedClient.Name}!";
                 _global.Client = authenticatedClient;
                 Application.Current.MainPage = new AppShell();
             }
             else
             {
-                LoginMessage = "Ongeldige inloggegevens.";
+                RegisterMessage = "Ongeldige registratiegegevens";
             }
-        }
-
-        [RelayCommand]
-        private void Register()
-        {
-            Application.Current.MainPage = new RegisterView(new RegisterViewModel(_authService, _global));
         }
     }
 }
