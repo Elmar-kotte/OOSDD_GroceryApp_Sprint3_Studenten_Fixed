@@ -6,11 +6,13 @@ on:
       - main
       - develop
       - feature/*
+      - Release/*
   pull_request:
     branches:
       - main
       - develop
       - feature/*
+      - Release/*
 
 jobs:
   test:
