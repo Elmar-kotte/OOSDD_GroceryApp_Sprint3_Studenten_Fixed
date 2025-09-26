@@ -59,10 +59,10 @@ namespace Grocery.Core.Services
             return products;
         }
 
-        public void ReplaceObservableList(List<Product> productsToRemove, ObservableCollection<Product> listToRemoveFrom)
+        public void ReplaceObservableList(List<Product> newListItems, ObservableCollection<Product> listToRemoveFrom)
         {
             listToRemoveFrom.Clear();
-            foreach (var product in productsToRemove)
+            foreach (var product in newListItems)
                 listToRemoveFrom.Add(product);
         }
 
