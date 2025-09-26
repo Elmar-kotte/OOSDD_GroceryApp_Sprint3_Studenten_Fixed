@@ -6,6 +6,8 @@ using Grocery.Core.Interfaces.Services;
 using Grocery.Core.Models;
 using System.Collections.ObjectModel;
 using System.Text.Json;
+using System.Windows.Input;
+
 
 namespace Grocery.App.ViewModels
 {
@@ -19,6 +21,8 @@ namespace Grocery.App.ViewModels
         public ObservableCollection<GroceryListItem> MyGroceryListItems { get; set; } = [];
         public ObservableCollection<Product> AvailableProducts { get; set; } = [];
 
+        public ICommand SearchCommand { get; }
+
         [ObservableProperty]
         GroceryList groceryList = new(0, "None", DateOnly.MinValue, "", 0);
         [ObservableProperty]
@@ -26,12 +30,21 @@ namespace Grocery.App.ViewModels
 
         public GroceryListItemsViewModel(IGroceryListItemsService groceryListItemsService, IProductService productService, IFileSaverService fileSaverService)
         {
+            SearchCommand = new Command<string>(OnSearch);
             _groceryListItemsService = groceryListItemsService;
             _productService = productService;
             _fileSaverService = fileSaverService;
             Load(groceryList.Id);
         }
-
+        
+        private void OnSearch(string text)
+        {
+            // Filter products with new text
+            GetAvailableProducts();
+            List<Product> newList = _groceryListItemsService.FilterAvailableProducts(text, AvailableProducts.ToList());
+            _groceryListItemsService.ReplaceObservableList(newList, AvailableProducts);
+        }
+        
         private void Load(int id)
         {
             MyGroceryListItems.Clear();
@@ -46,6 +59,7 @@ namespace Grocery.App.ViewModels
                 if (MyGroceryListItems.FirstOrDefault(g => g.ProductId == p.Id) == null  && p.Stock > 0)
                     AvailableProducts.Add(p);
         }
+
 
         partial void OnGroceryListChanged(GroceryList value)
         {

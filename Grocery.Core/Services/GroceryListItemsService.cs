@@ -1,4 +1,5 @@
-﻿using Grocery.Core.Interfaces.Repositories;
+﻿using System.Collections.ObjectModel;
+using Grocery.Core.Interfaces.Repositories;
 using Grocery.Core.Interfaces.Services;
 using Grocery.Core.Models;
 
@@ -47,6 +48,22 @@ namespace Grocery.Core.Services
         public GroceryListItem? Update(GroceryListItem item)
         {
             throw new NotImplementedException();
+        }
+        
+        public List<Product> FilterAvailableProducts(string stringInName, List<Product> products)
+        {
+            stringInName = stringInName.ToLower(); // Ensure the string is in lowecase to avoid irritation while searching
+            
+            // Filter through all products and create a new list with them
+            products = products.Where(x => x.Name.Contains(stringInName, StringComparison.CurrentCultureIgnoreCase)).ToList();
+            return products;
+        }
+
+        public void ReplaceObservableList(List<Product> newListItems, ObservableCollection<Product> listToRemoveFrom)
+        {
+            listToRemoveFrom.Clear();
+            foreach (var product in newListItems)
+                listToRemoveFrom.Add(product);
         }
 
         private void FillService(List<GroceryListItem> groceryListItems)
