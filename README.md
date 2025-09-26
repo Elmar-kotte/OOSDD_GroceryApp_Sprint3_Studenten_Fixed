@@ -4,10 +4,10 @@ In dit project wordt de Gitflow-structuur gebruikt:
 
 ### Branches
 
-main: Gebruikt voor live-releases
-release: Gebruikt om te ontwikkelen op een specifieke releaseversie
-develop: Gebruikt om van af te takken voor feature-branches
-feature: Gebruikt om specifieke features te ontwikkelen met de volgende naamgevingsconventie: "feature/UC1"
+main: Gebruikt voor live-releases<br/>
+release: Gebruikt om te ontwikkelen op een specifieke releaseversie<br/>
+develop: Gebruikt om van af te takken voor feature-branches<br/>
+feature: Gebruikt om specifieke features te ontwikkelen met de volgende naamgevingsconventie: "feature/UC1"<br/>
 
 # New
 
